@@ -23,7 +23,7 @@
     <div class="mainContent">
         <div class="row">
             <div class="money">
-                Money: &nbsp; <span id="money"><%= money %></span>
+                Money: &nbsp; <span id="money">₹<%= money %></span>
             </div>
             <div class="token">
                 Tokens: &nbsp; <span id="token"><%= tokens %></span>
@@ -36,13 +36,13 @@
                     <Input class="range" type="range" value="0" min="0" max="<%= money %>" onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)"></Input>
                     <span class="rangeValue" id="rangeValue">₹0</span>
                 </div>
-                <form method="POST">
+                <form method="POST" action="">
                     <div class="tokensRange rangeValue" style="color: white;">Tokens: &nbsp; <span id="Rtoken">0</span></div>
-                    <input type="hidden" id="money" name="money">
-                    <btn class="convertBtn" type="Submit">Convert</btn>
+                    <input type="hidden" id="mon" name="money">
+                    <input class="convertBtn" type="submit" value="Convert">
                 </form>
                 <div class="buttons">
-                    <div class="button">Deposite money to bank</div>
+                    <div class="button" onclick="alert('Hey, we see you have discovered our deposit feature but, we have not been able to make it yet.It is coming soon..')">Deposite money to bank</div>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
     <script>
         function rangeSlide(value) {
             document.getElementById('rangeValue').innerHTML = "₹" + value;
-            document.getElementById('money').value = value;
+            document.getElementById('mon').value = value;
             document.getElementById('Rtoken').innerHTML = 2*value;
         }
     </script>

@@ -60,7 +60,7 @@ app.use('/log', (req,res,next) => {
 // ***************************************************************
 app.get("/", (req, res) => {
     // res.render("home");
-    res.redirect("/logreg");
+    res.render("home");
 })
 
 app.get("/logreg", (req, res) => {
@@ -139,6 +139,11 @@ app.get('/log/dashboard/earning', async (req, res) => {
     await user.findById(session.userid).then(async data => {
         res.render("money", {money: data.money, tokens: data.tokens, userName: data.name})
     }).catch(err => {console.log(err); res.redirect("/")});
+})
+
+app.post('/log/dashboard/earning', async (req, res) => {
+    console.log(req.body.money);
+    user.findOneAndUpdate({_id: session.userid}, {$inc: {money: (-1 * req.body.money), tokens: (2 * req.body.money)}}).then(data => res.redirect('/log/dashboard/earning')).catch(err => {console.log(err); res.redirect("/log/browse")});
 })
 
 app.get('/log/browse', async (req, res) => {
