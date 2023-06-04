@@ -154,7 +154,7 @@ app.get('/log/browse/:id', async (req, res) => {
         user.findById(session.userid).then(h => {
             if(h.tokens > 10){
                 user.findOneAndUpdate({_id: session.userid}, {$inc: {tokens: -10}}).catch(err => {console.log(err); res.redirect("/log/browse")});
-                user.findOneAndUpdate({_id: data.userId}, {$inc: {tokens: 2}}).catch(err => {console.log(err); res.redirect("/log/browse")});
+                user.findOneAndUpdate({_id: data.userId}, {$inc: {money: 10}}).catch(err => {console.log(err); res.redirect("/log/browse")});
                 res.render("pdf", {data})
             }else{
                 res.redirect("/log/browse");
