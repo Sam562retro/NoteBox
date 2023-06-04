@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="/css/browse.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Alfa+Slab+One&family=Bebas+Neue&family=Black+Ops+One&family=Delicious+Handrawn&family=Montserrat:wght@600;700;800;900&family=Mouse+Memoirs&family=Oswald:wght@200;300;400;500;600;700&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,900&family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=Roboto+Slab:wght@100;300;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+    <%- include('./sideNav.ejs') %>
+    <div class="mainContent">
+        <div class="contentHeading"
+            style="width: 88vw; display: flex; justify-content: space-between; align-items: center;">
+            Browse Notes:
+            <div class="search">
+                <input onkeyup="search()" placeholder="search for subject, topic or class." type="text" id="input" class="searchInp">
+                <div class="searchIcon">
+                    <i class="bi bi-search searchIcon"></i>
+                </div>
+            </div>
+            <div style="display: flex; text-shadow: none; align-items: center;">
+                <div onclick="window.location.href='add.html'" class="dummyClass add">Add <i class="bi bi-plus plus"></i></div>
+            </div>
+        </div>
+        <div class="cards">
+            <% notes.forEach(note => { %>
+            <div class="card">
+                <div class="info">
+                    <div class="subHeading subject">
+                        <%= note.subject %>
+                    </div>
+                    <div class="details">
+                        <div>
+                            <div class="detailsItem">
+                                Date Uploaded: &nbsp; <span id="date"><%= note.date %></span>
+                            </div>
+                            <div class="detailsItem">
+                                Topic: &nbsp; <span class="topic" id="topic"><%= note.topic %> </span>
+                            </div>
+                            <div class="detailsItem">
+                                Class: &nbsp; <span class="grade" id="class"><%= note.class %></span>
+                            </div>
+                        </div>
+                        <a class="button" href="view.html">View</a>
+                    </div>
+                </div>
+                <div class="preview">
+                    <embed class="pdf" src="ok 2.pdf" width="300" height="710.4px" />
+                </div>
+            </div>
+            <% }) %>
+        </div>
+
+    </div>
+    <script>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+
+        async function search() {
+            var input, filter, li, a, i, txtValue;
+            input = document.getElementById("input");
+            filter = input.value.toLowerCase();
+            li = document.getElementsByClassName("card");
+            for (i = 0; i < li.length; i++) {
+                info = li[i].getElementsByClassName("info")[0];
+                details = li[i].getElementsByClassName("details")[0];
+                detailsItem = li[i].getElementsByClassName("detailsItem");
+
+                subject = info.getElementsByClassName("subject")[0];
+                topic = detailsItem[1].getElementsByClassName("topic")[0];
+                grade = detailsItem[2].getElementsByClassName("grade")[0];
+
+                subValue = subject.textContent || subject.innerText ;
+                topValue = topic.textContent || topic.innerText ;
+                gradValue = grade.textContent || grade.innerText;
+                console.log(txtValue)
+                if ((subValue.toLowerCase().indexOf(filter)) > -1 || (topValue.toLowerCase().indexOf(filter)) > -1 || (gradValue.toLowerCase().indexOf(filter)) > -1) {
+                    li[i].classList.remove("cardHide")
+                } else {
+                    li[i].classList.add("cardHide");
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
