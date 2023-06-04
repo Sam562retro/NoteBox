@@ -127,6 +127,7 @@ app.post('/log/dashboard/add', async (req, res) => {
     req.files.file.mv(filePath).catch(err=> (console.log(err)))
     obj.filePath = `/noteSave/` + fileName;
     await note.create(obj).then(item => {
+        user.findOneAndUpdate({_id: session.userid}, {$inc: {tokens: 30}}).catch(err => {console.log(err); res.redirect("/log/browse")});
         res.redirect("/log/dashboard");
     }).catch(err => {
         console.log(err)
@@ -134,8 +135,10 @@ app.post('/log/dashboard/add', async (req, res) => {
     })
 })
 
-app.get('/log/dashboard/earning', (req, res) => {
-    res.send("Earning");
+app.get('/log/dashboard/earning', async (req, res) => {
+    await user.findById(session.userid).then(async data => {
+        res.render("money", {money: data.money, tokens: data.tokens, userName: data.name})
+    }).catch(err => {console.log(err); res.redirect("/")});
 })
 
 app.get('/log/browse', async (req, res) => {
@@ -146,8 +149,18 @@ app.get('/log/browse', async (req, res) => {
     }).catch(err => {console.log(err); res.redirect("/")});
 })
 
-app.get('/log/browse/:id', (req, res) => {
-    res.send("see");
+app.get('/log/browse/:id', async (req, res) => {
+    await note.findById(req.params.id).then(async data => {
+        user.findById(session.userid).then(h => {
+            if(h.tokens > 10){
+                user.findOneAndUpdate({_id: session.userid}, {$inc: {tokens: -10}}).catch(err => {console.log(err); res.redirect("/log/browse")});
+                user.findOneAndUpdate({_id: data.userId}, {$inc: {tokens: 2}}).catch(err => {console.log(err); res.redirect("/log/browse")});
+                res.render("pdf", {data})
+            }else{
+                res.redirect("/log/browse");
+            }
+        })
+    }).catch(err => {console.log(err); res.redirect("/")});
 })
 
 app.get("/logout", (req, res) => {

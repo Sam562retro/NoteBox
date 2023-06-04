@@ -53,7 +53,7 @@
                                 Class: &nbsp; <span class="grade" id="class"><%= note.class %></span>
                             </div>
                         </div>
-                        <a class="button" href="view.html">View</a>
+                        <btn class="button" onclick = ask("<%= note._id %>")>View</btn>
                     </div>
                 </div>
                 <div class="preview">
@@ -64,6 +64,18 @@
         </div>
 
     </div>
+    <script>
+        function ask(val){
+            if(<%= tokens %> > 10){
+                if(confirm("10 Tokens Will Be Deducted For Viewing These Notes")){
+                location.href=`/log/browse/${val}`;
+            }
+            }else{
+                alert("You must have 10 tokens to view notes !");
+            }
+            
+        }
+    </script>
     <script>
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
