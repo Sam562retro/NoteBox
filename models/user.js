@@ -12,6 +12,16 @@ const useSchema = new mongoose.Schema({
     email:{
         required: true,
         type: String
+    },
+    tokens: {
+        type: Number,
+        required: true,
+        default: 100
+    },
+    money: {
+        type: Number,
+        required: true,
+        default: 0
     }
 });
 

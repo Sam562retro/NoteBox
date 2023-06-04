@@ -103,21 +103,35 @@ app.post("/register", async (req, res) => {
 app.get('/log/dashboard', async (req, res) => {
     await user.findById(session.userid).then(async data => {
         await note.find({userId: session.userid }).then(async notes => {
-            res.render("dashboard", {userName: data.name, notes})
+            res.render("dashboard", {tokens: data.tokens, userName: data.name, notes})
         }).catch(err => {console.log(err); res.redirect("/")});
     }).catch(err => {console.log(err); res.redirect("/")});
 })
 
-app.get('/log/dashboard/add', (req, res) => {
-    // const fileName = randomstring.generate() + req.files.img.name;
-    // const filePath = __dirname + '/public/hospital-images/' + fileName;
-    // req.files.img.mv(filePath).catch(err=> (console.log(err)))
-    // obj.image = `/hospital-images/` + fileName;
-    res.send("add");
+app.get('/log/dashboard/add', async (req, res) => {
+    await user.findById(session.userid).then(async data => {
+            res.render("add", {tokens: data.tokens, userName: data.name})
+    }).catch(err => {console.log(err); res.redirect("/")});
 })
 
-app.post('/log/dashboard/add', (req, res) => {
-    res.send("add");
+app.post('/log/dashboard/add', async (req, res) => {
+    obj = {
+        topic: req.body.fname,
+        class: req.body.class,
+        subject: req.body.subject,
+        userId: session.userid
+    };
+
+    const fileName = randomstring.generate() + req.files.file.name;
+    const filePath = __dirname + '/static/noteSave/' + fileName;
+    req.files.file.mv(filePath).catch(err=> (console.log(err)))
+    obj.filePath = `/noteSave/` + fileName;
+    await note.create(obj).then(item => {
+        res.redirect("/log/dashboard");
+    }).catch(err => {
+        console.log(err)
+        res.redirect("/log/dashboard/add");
+    })
 })
 
 app.get('/log/dashboard/earning', (req, res) => {
@@ -127,7 +141,7 @@ app.get('/log/dashboard/earning', (req, res) => {
 app.get('/log/browse', async (req, res) => {
     await user.findById(session.userid).then(async data => {
         await note.find().then(async notes => {
-            res.render("browse", {userName: data.name, notes})
+            res.render("browse", {tokens: data.tokens, userName: data.name, notes})
         }).catch(err => {console.log(err); res.redirect("/")});
     }).catch(err => {console.log(err); res.redirect("/")});
 })

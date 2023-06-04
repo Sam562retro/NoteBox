@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div style="display: flex; text-shadow: none; align-items: center;">
-                <div onclick="window.location.href='add.html'" class="dummyClass add">Add <i class="bi bi-plus plus"></i></div>
+                <div onclick="window.location.href='/log/dashboard/add'" class="dummyClass add">Add <i class="bi bi-plus plus"></i></div>
             </div>
         </div>
         <div class="cards">
@@ -44,7 +44,7 @@
                     <div class="details">
                         <div>
                             <div class="detailsItem">
-                                Date Uploaded: &nbsp; <span id="date"><%= note.date %></span>
+                                Date Uploaded: &nbsp; <span id="date"><%= note.date.getDate() %> / <%= note.date.getMonth()+1 %> / <%= note.date.getFullYear() %></span>
                             </div>
                             <div class="detailsItem">
                                 Topic: &nbsp; <span class="topic" id="topic"><%= note.topic %> </span>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="preview">
-                    <embed class="pdf" src="ok 2.pdf" width="300" height="710.4px" />
+                    <embed class="pdf" src="<%= note.filePath %>" width="300" height="710.4px" />
                 </div>
             </div>
             <% }) %>
